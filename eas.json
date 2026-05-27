@@ -1,12 +1,49 @@
 {
-  "cli": { "version": ">= 18.0.0" },
+  "cli": {
+    "version": ">= 10.0.0",
+    "appVersionSource": "remote"
+  },
   "build": {
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "ios": { "simulator": true }
+      "env": {
+        "EXPO_PUBLIC_MAPBOX_TOKEN": "PLACEHOLDER_REPLACE_WITH_PK_TOKEN"
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
+      }
     },
-    "preview": { "distribution": "internal" },
-    "production": { "autoIncrement": true }
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_MAPBOX_TOKEN": "PLACEHOLDER_REPLACE_WITH_PK_TOKEN"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_MAPBOX_TOKEN": "PLACEHOLDER_REPLACE_WITH_PK_TOKEN"
+      },
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "samira@roavia.com",
+        "ascAppId": "PLACEHOLDER_REPLACE_WITH_APP_STORE_CONNECT_APP_ID",
+        "appleTeamId": "PLACEHOLDER_REPLACE_WITH_APPLE_TEAM_ID"
+      },
+      "android": {
+        "serviceAccountKeyPath": "../path/to/api-key.json",
+        "track": "internal"
+      }
+    }
   }
 }

@@ -41,11 +41,34 @@ import {
   spacing,
   typography,
 } from '../../lib/tokens'
-import type { Collection, Place, SavedPlace } from '../../types'
+import type { Place } from '../../types'
+
+// Local type for the Supabase JOIN result — collection returned as a nested object.
+interface QueryCollection {
+  id: string
+  name: string
+  type: string
+  is_default: boolean
+}
+
+interface SavedPlaceRow {
+  id: string
+  place_id: string
+  saved_at: string
+  collection: QueryCollection | null
+  place: Place | null
+}
+
+const COLLECTION_ORDER: Record<string, number> = {
+  radar: 0,
+  tried_it: 1,
+  loved_it: 2,
+  custom: 3,
+}
 
 interface CollectionGroup {
-  collection: Collection
-  rows: SavedPlace[]
+  collection: QueryCollection
+  rows: SavedPlaceRow[]
 }
 
 /**
@@ -57,7 +80,7 @@ interface CollectionGroup {
  * IF THIS BREAKS: a save with a missing collection join is silently skipped —
  *   confirm the SELECT below has `collection:collections(...)`.
  */
-function groupByCollection(saves: SavedPlace[]): CollectionGroup[] {
+function groupByCollection(saves: SavedPlaceRow[]): CollectionGroup[] {
   const byId = new Map<string, CollectionGroup>()
   for (const row of saves) {
     if (!row.collection) continue
@@ -69,7 +92,7 @@ function groupByCollection(saves: SavedPlace[]): CollectionGroup[] {
     }
   }
   return Array.from(byId.values()).sort(
-    (a, b) => a.collection.position - b.collection.position
+    (a, b) => (COLLECTION_ORDER[a.collection.type] ?? 99) - (COLLECTION_ORDER[b.collection.type] ?? 99)
   )
 }
 
@@ -78,7 +101,7 @@ export default function SavedScreen() {
 
   const [authChecked, setAuthChecked] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
-  const [saves, setSaves] = useState<SavedPlace[]>([])
+  const [saves, setSaves] = useState<SavedPlaceRow[]>([])
   const [loading, setLoading] = useState(true)
 
   // One-shot auth check. We don't subscribe to auth changes here because the
@@ -105,12 +128,12 @@ export default function SavedScreen() {
       const { data } = await supabase
         .from('saved_places')
         .select(
-          'id, place_id, saved_at, collection:collections(id, name, slug, position, is_default), place:places(id, name, category, tier, photo_url)'
+          'id, place_id, saved_at, collection:collections(id, name, type, is_default), place:places(id, name, category, tier)'
         )
         .eq('user_id', userId)
         .order('saved_at', { ascending: false })
       if (cancelled) return
-      setSaves((data as unknown as SavedPlace[]) ?? [])
+      setSaves((data as unknown as SavedPlaceRow[]) ?? [])
       setLoading(false)
     })()
     return () => {

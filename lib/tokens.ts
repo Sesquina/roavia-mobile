@@ -55,6 +55,20 @@ export const colors = {
   closed: '#9CA3AF',
   error: '#EF4444',
   info: '#4285F4',
+
+  // AAA-verified text + surface tokens (Sprint 00 addition — auth and map screens)
+  forestDeep: '#052A26',
+  darkBg: '#0F172A',
+  darkCard: '#1E293B',
+  darkBorder: '#334155',
+  lPrimary: '#0f172a',
+  lBody: '#334155',
+  lOpen: '#035040',
+  bookText: '#052A26',
+  dPrimary: '#f1f5f9',
+  dBody: '#E2E8F0',
+  dSub: '#b8c4d0',
+  dOpen: '#7dedbf',
 } as const
 
 export const spacing = {
@@ -64,6 +78,7 @@ export const spacing = {
   lg: 24,
   xl: 40,
   xxl: 64,
+  xxxl: 48,
 } as const
 
 export const radii = {
@@ -102,6 +117,16 @@ export const typography = {
     '6xl': 28,
     '7xl': 32,
   },
+  // Flat size aliases (Sprint 00 addition — auth and map screens)
+  display: 28,
+  h1: 22,
+  h2: 18,
+  title: 15,
+  body: 13,
+  label: 11,
+  caption: 10,
+  micro: 9,
+  button: 14,
 } as const
 
 export const CATEGORY_EMOJI: Record<string, string> = {
@@ -126,3 +151,11 @@ export const TIER_DISPLAY: Record<string, string> = {
   beloved: '♥ Beloved',
   gem: '✨ Find',
 }
+
+export const mapConfig = {
+  defaultLng: -118.3617,
+  defaultLat: 34.0900,
+  defaultZoom: 13,
+  lightStyle: 'mapbox://styles/mapbox/light-v11',
+  darkStyle: 'mapbox://styles/mapbox/dark-v11',
+} as const

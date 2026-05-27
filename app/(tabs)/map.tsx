@@ -1,42 +1,58 @@
 /**
  * FILE: app/(tabs)/map.tsx
- * PURPOSE: Stub for the mobile map screen. Real implementation lands with
- *   the @rnmapbox/maps integration in a follow-up sprint; for Sprint 7 mobile
- *   parity we only need the saved screen wired end-to-end.
+ * PURPOSE: Map screen scaffold. Initializes @rnmapbox/maps with correct token and config.
+ *   This is the foundation. Full map features (markers, filters, place cards) build on this.
+ * DEPENDS ON: @rnmapbox/maps, lib/tokens.ts for map config and colors.
+ *   EXPO_PUBLIC_MAPBOX_TOKEN must start with pk. (public token, not sk.)
+ *   The RNMapboxMapsVersion in app.json pins the native SDK version — build time only.
+ * USED BY: app/(tabs)/_layout.tsx tab navigation.
+ * IF SOMETHING BREAKS HERE:
+ *   1. Confirm EXPO_PUBLIC_MAPBOX_TOKEN starts with pk. (not sk.)
+ *   2. Confirm this is running in a development build, not Expo Go.
+ *      @rnmapbox/maps does not work in Expo Go. EAS development build required.
+ *   3. Check that RNMapboxMapsVersion in app.json is set correctly.
  */
-import { StyleSheet, Text, View } from 'react-native'
-import { colors, spacing, typography } from '../../lib/tokens'
+
+import React, { useRef } from 'react';
+import { View, StyleSheet } from 'react-native';
+import MapboxGL from '@rnmapbox/maps';
+import { colors, mapConfig } from '../../lib/tokens';
+import { useAuth } from '../../lib/auth-context';
+
+// Initialize Mapbox with the public token (pk. prefix required)
+MapboxGL.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
 
 export default function MapScreen() {
+  const { user } = useAuth();
+  const cameraRef = useRef<MapboxGL.Camera>(null);
+
   return (
-    <View style={styles.page}>
-      <Text style={styles.title}>Map</Text>
-      <Text style={styles.body}>
-        The mobile map ships in the @rnmapbox/maps integration sprint.
-      </Text>
+    <View style={styles.container}>
+      <MapboxGL.MapView
+        style={styles.map}
+        styleURL={MapboxGL.StyleURL.Light}
+        logoEnabled={false}
+        attributionEnabled={false}
+        compassEnabled={false}
+        scaleBarEnabled={false}
+      >
+        <MapboxGL.Camera
+          ref={cameraRef}
+          centerCoordinate={[mapConfig.defaultLng, mapConfig.defaultLat]}
+          zoomLevel={mapConfig.defaultZoom}
+          animationMode="none"
+        />
+      </MapboxGL.MapView>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  page: {
+  container: {
     flex: 1,
-    backgroundColor: colors.dark.bg,
-    padding: spacing.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: colors.darkBg,
   },
-  title: {
-    fontFamily: typography.fontFamily,
-    fontSize: typography.size['6xl'],
-    fontWeight: typography.weight.bold,
-    color: colors.dark.text,
-    marginBottom: spacing.sm,
+  map: {
+    flex: 1,
   },
-  body: {
-    fontFamily: typography.fontFamily,
-    fontSize: typography.size.md,
-    color: colors.dark.subtext,
-    textAlign: 'center',
-  },
-})
+});

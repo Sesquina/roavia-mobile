@@ -1,27 +1,24 @@
 /**
  * FILE: app/_layout.tsx
- * PURPOSE: Expo Router root layout. Wraps every screen in a single Stack so
- *   nested groups (auth, tabs, place detail) inherit consistent navigation
- *   styling. Sprint 7 mobile parity — this is the entry point that replaces
- *   the deleted blank-template App.tsx.
- * DEPENDS ON:
- *   - expo-router (file-based routing)
- *   - expo-status-bar (status bar style)
- * USED BY: Expo Router auto-loads this file as the root.
- * IF SOMETHING BREAKS HERE:
- *   - "Cannot find native module RNCSafeAreaContext": run
- *     `npx expo install react-native-safe-area-context`
- *   - White flash on cold start: confirm splash backgroundColor matches
- *     dark.bg in app.json.
+ * PURPOSE: Root layout. Provides auth context to all screens.
+ * DEPENDS ON: lib/auth-context.tsx for AuthProvider. expo-router for Stack.
+ * USED BY: Expo Router — this is the root of the navigation tree.
+ * IF SOMETHING BREAKS HERE: AuthProvider must wrap Stack. If auth breaks app-wide,
+ *   check that AuthProvider is present and lib/supabase.ts is correctly initialized.
  */
-import { Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
+
+import { Stack } from 'expo-router';
+import { AuthProvider } from '../lib/auth-context';
 
 export default function RootLayout() {
   return (
-    <>
-      <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false }} />
-    </>
-  )
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="place/[id]" />
+      </Stack>
+    </AuthProvider>
+  );
 }
