@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.roavia.app"
+      "bundleIdentifier": "com.roavia.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.roavia.app",
@@ -35,7 +38,7 @@
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.18.2"
+          "RNMapboxMapsVersion": "11.20.1"
         }
       ]
     ],
