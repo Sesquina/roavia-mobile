@@ -7,9 +7,7 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "env": {
-        "EXPO_PUBLIC_MAPBOX_TOKEN": "PLACEHOLDER_REPLACE_WITH_PK_TOKEN"
-      },
+      "npmFlags": "--legacy-peer-deps",
       "android": {
         "buildType": "apk"
       },
@@ -19,17 +17,13 @@
     },
     "preview": {
       "distribution": "internal",
-      "env": {
-        "EXPO_PUBLIC_MAPBOX_TOKEN": "PLACEHOLDER_REPLACE_WITH_PK_TOKEN"
-      },
+      "npmFlags": "--legacy-peer-deps",
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
-      "env": {
-        "EXPO_PUBLIC_MAPBOX_TOKEN": "PLACEHOLDER_REPLACE_WITH_PK_TOKEN"
-      },
+      "npmFlags": "--legacy-peer-deps",
       "autoIncrement": true
     }
   },
