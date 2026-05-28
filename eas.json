@@ -36,9 +36,9 @@
   "submit": {
     "production": {
       "ios": {
-        "appleId": "samira@roavia.com",
+        "appleId": "samiraesquina@gmail.com",
         "ascAppId": "PLACEHOLDER_REPLACE_WITH_APP_STORE_CONNECT_APP_ID",
-        "appleTeamId": "PLACEHOLDER_REPLACE_WITH_APPLE_TEAM_ID"
+        "appleTeamId": "PV8B2R8Y22"
       },
       "android": {
         "serviceAccountKeyPath": "../path/to/api-key.json",
